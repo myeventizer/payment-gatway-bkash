@@ -10,8 +10,13 @@ const bkashRouter = require("./routes/bkashRouter.js");
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(cors());
-
+app.use(
+  cors({
+    origin: ["http://localhost:8080"],
+    methods: ["GET", "POST", "DELETE", "UPDATE", "PUT", "PATCH"],
+    credentials: true,
+  })
+);
 app.use("/api/bkash", bkashRouter);
 
 app.get("/", (req, res) => {
