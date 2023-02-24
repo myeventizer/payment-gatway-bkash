@@ -39,6 +39,7 @@ app.use((req, res, next) => {
   res.status(404).send("Sorry, Not Found !!!");
 });
 
-app.listen(port, () =>
+var server = app.listen(port, () =>
   console.log(`Example app listening at http://localhost:${port}`)
 );
+server.setTimeout(500000);
