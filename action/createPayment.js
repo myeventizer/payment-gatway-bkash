@@ -2,7 +2,7 @@ const bkashConfig = require("../config/bkashConfig.json");
 const fetch = require("node-fetch");
 const { v4: uuidv4 } = require("uuid");
 const authHeaders = require("../action/authHeader.js");
-
+const { isDevelopment } = require("../utilitis/chekckDevelepment");
 const createPayment = async (req) => {
   console.log("Create Payment API Start !!!");
   try {
@@ -12,15 +12,17 @@ const createPayment = async (req) => {
       body: JSON.stringify({
         mode: "0011",
         payerReference: " ",
-        callbackURL: bkashConfig.backend_callback_url,
-        amount: req.amount ? req.amount : 1, 
+        callbackURL: isDevelopment
+          ? bkashConfig.backend_callback_urlDev
+          : bkashConfig.backend_callback_urlProd,
+        amount: req.amount ? req.amount : 1,
         currency: "BDT",
         intent: "sale",
-        merchantInvoiceNumber: "Inv" + uuidv4().substring(0, 5)
+        merchantInvoiceNumber: "Inv" + uuidv4().substring(0, 5),
       }),
     });
     const createResult = await createResopnse.json();
-    
+
     return createResult;
   } catch (e) {
     console.log(e);
