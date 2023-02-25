@@ -19,9 +19,9 @@ const bkashCallback = async (req, res) => {
   try {
     if (req.query.status === "success") {
       let response = await executePayment(req.query.paymentID);
-      // if (response.message) {
-      //   response = await queryPayment(req.query.paymentID);
-      // }
+      if (response.message) {
+        response = await queryPayment(req.query.paymentID);
+      }
       if (response.statusCode && response.statusCode === "0000") {
         console.log("Payment Successful ", response);
         // Your frontend success route
