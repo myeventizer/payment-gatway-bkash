@@ -16,30 +16,25 @@ const checkout = async (req, res) => {
 };
 
 const bkashCallback = async (req, res) => {
+  console.log(req.query);
   try {
     if (req.query.status === "success") {
-      let response = await executePayment(req.query.paymentID);
-      if (response.message) {
-        response = await queryPayment(req.query.paymentID);
-      }
-      if (response.statusCode && response.statusCode === "0000") {
-        console.log("Payment Successful ", response);
-        // Your frontend success route
-        res.redirect(
-          `${bkashConfig.frontend_success_url}?msg=${response.statusMessage}&trxID=${response.trxID}&paymentID=${response.paymentID}`
-        );
-      } else {
-        console.log("Payment Failed ", response);
-
-        res.redirect(
-          `${bkashConfig.frontend_fail_url}?data=${response.statusMessage}`
-        );
-      }
+      res.redirect(
+        `${bkashConfig.frontend_after_complete_redirect}?paymentID=${req.query.paymentID}`
+      );
     } else {
-      console.log("Payment Failed !!!");
-      // Your frontend failed route
+      console.log("Payment Failed");
       res.redirect(bkashConfig.frontend_fail_url);
     }
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+const afterExecutePayment = async (req, res) => {
+  try {
+    let response = await executePayment(req.body.paymentID);
+    res.json(response);
   } catch (e) {
     console.log(e);
   }
@@ -79,4 +74,5 @@ module.exports = {
   search,
   refund,
   refundStatus,
+  afterExecutePayment,
 };

@@ -2,7 +2,7 @@ const bkashConfig = require("../config/bkashConfig.json");
 const fetch = require("node-fetch");
 const { v4: uuidv4 } = require("uuid");
 const authHeaders = require("../action/authHeader.js");
-let isDevelopment = false
+let isDevelopment = true
 const createPayment = async (req) => {
   console.log("Create Payment API Start !!!");
   try {
@@ -11,7 +11,7 @@ const createPayment = async (req) => {
       headers: await authHeaders(),
       body: JSON.stringify({
         mode: "0011",
-        payerReference: " ",
+        payerReference: req.bkashNumber,
         callbackURL: isDevelopment
           ? bkashConfig.backend_callback_urlDev
           : bkashConfig.backend_callback_urlProd,

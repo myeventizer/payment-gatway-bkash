@@ -1,14 +1,22 @@
 const express = require("express");
 const router = express.Router();
 
-const {bkashCallback,checkout,refund,refundStatus,search} = require('../controller/bkashController.js');
+const {
+  bkashCallback,
+  checkout,
+  refund,
+  refundStatus,
+  search,
+  afterExecutePayment,
+} = require("../controller/bkashController.js");
 const authCheck = require("../middleware/bkashAuthorization.js");
 
 router.use(authCheck);
 
 // User part
-router.post("/create",checkout);
+router.post("/create", checkout);
 router.get("/callback", bkashCallback);
+router.post("/execute", afterExecutePayment);
 
 // Admin part
 router.post("/search", search);
