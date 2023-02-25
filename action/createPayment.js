@@ -2,7 +2,7 @@ const bkashConfig = require("../config/bkashConfig.json");
 const fetch = require("node-fetch");
 const { v4: uuidv4 } = require("uuid");
 const authHeaders = require("../action/authHeader.js");
-const { isDevelopment } = require("../utilitis/chekckDevelepment");
+let isDevelopment = false
 const createPayment = async (req) => {
   console.log("Create Payment API Start !!!");
   try {

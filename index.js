@@ -38,11 +38,7 @@ app.use((req, res, next) => {
   console.log("Sorry, Not Found !!!");
   res.status(404).send("Sorry, Not Found !!!");
 });
-var server = app.listen(app.get('port'), function() {
-  console.log('Express server listening on port ' + server.address().port);
-});
-server.timeout = 500000;
-// var server = app.listen(port, () =>
-//   console.log(`Example app listening at http://localhost:${port}`)
-// );
-// server.timeout = 500000;
+
+app.listen(port, () =>
+  console.log(`Example app listening at http://localhost:${port}`)
+);
