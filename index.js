@@ -21,7 +21,7 @@ app.use("/api/bkash", bkashRouter);
 
 app.get("/", (req, res) => {
   try {
-    res.send("Bkash payment request");
+    res.send("Bkash payment request updated");
   } catch (e) {
     console.log(e);
   }
