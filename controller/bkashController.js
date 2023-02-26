@@ -4,11 +4,12 @@ const executePayment = require("../action/executePayment.js");
 const queryPayment = require("../action/queryPayment.js");
 const searchTransaction = require("../action/searchTransaction.js");
 const refundTransaction = require("../action/refundTransaction.js");
-
+let failed_redirect = "";
 const checkout = async (req, res) => {
   try {
     const createResult = await createPayment(req.body);
     console.log("Create Successful !!! ");
+    failed_redirect = req.body.failed_redirect;
     res.json(createResult);
   } catch (e) {
     console.log(e);
@@ -17,17 +18,26 @@ const checkout = async (req, res) => {
 
 const bkashCallback = async (req, res) => {
   console.log(req.query);
+  let frontend_fail_redirect_url = `${bkashConfig.frontend_fail_redirect}${failed_redirect}`;
   try {
     if (req.query.status === "success") {
       res.redirect(
         `${bkashConfig.frontend_after_complete_redirect}?paymentID=${req.query.paymentID}`
       );
+    } else if (req.query.status === "cancel") {
+      res.redirect(
+        `${frontend_fail_redirect_url}?issue="You cancel your payment request."`
+      );
     } else {
-      console.log("Payment Failed");
-      res.redirect(bkashConfig.frontend_fail_url);
+      res.redirect(
+        `${frontend_fail_redirect_url}?issue="Payment Failed! Please try again"`
+      );
     }
   } catch (e) {
     console.log(e);
+    res.redirect(
+      `${frontend_fail_redirect_url}?issue="Payment Failed! Please try again"`
+    );
   }
 };
 
